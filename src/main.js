@@ -8,7 +8,7 @@ import router from './router';
 Vue.use(ElementUI);
 //权限指令
 Vue.directive('has', {
-  bind: function(el, binding) {
+  bind: function (el, binding) {
     if (!Vue.prototype.$_has(binding.value)) {
       el.parentNode.removeChild(el);
     }
@@ -18,6 +18,8 @@ Vue.directive('has', {
 new Vue({
   el: '#app',
   router,
-  render: h => h(App)
+  components: {
+    App
+  },
+  template: "<App/>"
 });
-

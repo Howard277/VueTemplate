@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import login from '@/views/login.vue'
 Vue.use(Router);
 
 let baseRoute = [{
   path: '/login',
   name: '登录',
-  component: (resolve) => require(['../views/login.vue'], resolve)
+  component: login
 }, {
   path: '/401',
   name: '无权访问',

@@ -1,23 +1,27 @@
 import Vue from 'vue'
-import { Message } from 'element-ui'
+import {
+  Message
+} from 'element-ui'
 Vue.component(Message.name, Message)
 
 //sessionStorage
-export const session = function(key, value){
+export const session = function (key, value) {
   if (value === void(0)) {
+    //如果value是空，表示从session中取值
     var lsVal = sessionStorage.getItem(key);
-    if(lsVal && lsVal.indexOf('autostringify-') === 0 ){
+    if (lsVal && lsVal.indexOf('autostringify-') === 0) {
       return JSON.parse(lsVal.split('autostringify-')[1]);
-    }else{
+    } else {
       return lsVal;
     }
-  }else {
-    if (typeof(value)==="object" || Array.isArray(value)) {
+  } else {
+    //如果value不是空，表示向session中存值
+    if (typeof (value) === "object" || Array.isArray(value)) {
       value = 'autostringify-' + JSON.stringify(value);
     };
     return sessionStorage.setItem(key, value);
   }
-} 
+}
 
 //生成随机数
 export const getUUID = function (len) {
@@ -46,19 +50,21 @@ export const deepcopy = function (source) {
 //菜单数据组织
 export const buildMenu = function (array, ckey) {
   let menuData = [];
-  let indexKeys = Array.isArray(array) ? array.map((e) => {return e.id}) : [];
+  let indexKeys = Array.isArray(array) ? array.map((e) => {
+    return e.id
+  }) : [];
   ckey = ckey || 'parent_id';
   array.forEach(function (e, i) {
     //一级菜单
-    if (!e[ckey] || (e[ckey]===e.id)) {
+    if (!e[ckey] || (e[ckey] === e.id)) {
       delete e[ckey];
       menuData.push(deepcopy(e)); //深拷贝
-    }else if(Array.isArray(indexKeys)){
+    } else if (Array.isArray(indexKeys)) {
       //检测ckey有效性
-      let parentIndex = indexKeys.findIndex(function(id){
+      let parentIndex = indexKeys.findIndex(function (id) {
         return id == e[ckey];
       });
-      if(parentIndex===-1){
+      if (parentIndex === -1) {
         menuData.push(e);
       }
     }
@@ -115,7 +121,7 @@ export const dateFormat = function (source, ignore_minute) {
   }
 };
 //ajax错误处理
-export const catchError = function(error) {
+export const catchError = function (error) {
   if (error.response) {
     switch (error.response.status) {
       case 400:
@@ -129,7 +135,7 @@ export const catchError = function(error) {
         Vue.prototype.$message({
           message: error.response.data.message || '密码错误或账号不存在！',
           type: 'warning',
-          onClose: function(){
+          onClose: function () {
             location.reload();
           }
         });
