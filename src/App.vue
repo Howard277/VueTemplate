@@ -130,7 +130,7 @@ export default {
       });
       let originPath = util.deepcopy(userPath);
       originPath[0].children = actualRouter;
-      //注入路由
+      //注入404路由，所有其他请求默认路由到404
       vm.$router.addRoutes(originPath.concat([{
         path: '*',
         redirect: '/404'
@@ -194,6 +194,7 @@ export default {
     },
     loginDirect: function(newPath){
       this.signin(() => {
+        //跳转到新路径或跟路径
         this.$router.replace({path: newPath || '/'});
       });
     },
