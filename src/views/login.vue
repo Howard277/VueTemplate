@@ -51,7 +51,7 @@
 import axios from "axios";
 import CryptoJS from "crypto-js";
 import * as util from "../assets/util.js";
-//登录
+//传入用户名和密码，调用远程地址，获取token
 const requestLogin = params => {
   let words = CryptoJS.enc.Utf8.parse(params.password);
   let base64 = CryptoJS.enc.Base64.stringify(words);
@@ -87,11 +87,13 @@ export default {
 
       let loginParams = { name: vm.username, password: vm.password };
       vm.isBtnLoading = true;
+      //调用远程地址获取token
       requestLogin(loginParams)
         .then(res => {
           vm.isBtnLoading = false;
           if (res.data.token) {
             util.session("token", res.data);
+            //跳转到原来的目标地址
             vm.$emit("login", vm.$router.currentRoute.query.from);
           } else {
             return Promise.reject({

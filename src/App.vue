@@ -23,6 +23,7 @@ export default {
     }
   },
   methods: {
+    //解析用户信息，将可访问的资源映射成为map返回
     getPermission: function(userInfo) {
       let resourcePermission = {};
       if (Array.isArray(userInfo.resources)) {
@@ -33,6 +34,7 @@ export default {
       }
       return resourcePermission;
     },
+    //设置拦截器
     setInterceptor: function(resourcePermission) {
       let vm = this;
       myInterceptor = instance.interceptors.request.use(function(config) {
@@ -136,9 +138,10 @@ export default {
         redirect: '/404'
       }]));
     },
+    //登录操作
     signin: function(callback) {
       let vm = this;
-      //检查登录状态
+      //通过检查token，判断登录状态。如果token不存在，就跳转到登录界面。
       let localUser = util.session('token');
       if (!localUser || !localUser.token) {
         return vm.$router.push({ path: '/login', query: { from: vm.$router.currentRoute.path } });
@@ -192,12 +195,14 @@ export default {
         typeof callback === 'function' && callback();
       })
     },
+    //登录
     loginDirect: function(newPath){
       this.signin(() => {
         //跳转到新路径或跟路径
         this.$router.replace({path: newPath || '/'});
       });
     },
+    //退出
     logoutDirect: function(){
       //清除session
       util.session('token','');
