@@ -51,9 +51,9 @@ export const deepcopy = function (source) {
 export const buildMenu = function (array, ckey) {
   let menuData = [];
   let indexKeys = Array.isArray(array) ? array.map((e) => {
-    return e.id
+    return e.resourceCode
   }) : [];
-  ckey = ckey || 'parent_id';
+  ckey = ckey || 'parentResourceCode';
   array.forEach(function (e, i) {
     //一级菜单
     if (!e[ckey] || (e[ckey] === e.id)) {
@@ -64,16 +64,16 @@ export const buildMenu = function (array, ckey) {
       let parentIndex = indexKeys.findIndex(function (id) {
         return id == e[ckey];
       });
-      if (parentIndex === -1) {
+      // if (parentIndex === -1) {
         menuData.push(e);
-      }
+      // }
     }
   });
   let findChildren = function (parentArr) {
     if (Array.isArray(parentArr) && parentArr.length) {
       parentArr.forEach(function (parentNode) {
         array.forEach(function (node) {
-          if (parentNode.id === node[ckey]) {
+          if (parentNode.resourceCode === node[ckey]) {
             if (parentNode.children) {
               parentNode.children.push(node);
             } else {

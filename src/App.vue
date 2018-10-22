@@ -24,11 +24,11 @@ export default {
   },
   methods: {
     //解析用户信息，将可访问的资源映射成为map返回
-    getPermission: function(userInfo) {
+    getPermission: function(resources) {
       let resourcePermission = {};
-      if (Array.isArray(userInfo.resources)) {
-        userInfo.resources.forEach(function(e, i) {
-          let key = e.method.toLowerCase() + ',' + e.url;
+      if (Array.isArray(resources)) {
+        resources.forEach(function(e, i) {
+          let key = e.resourcePath;
           resourcePermission[key] = true;
         });
       }
@@ -66,24 +66,24 @@ export default {
         return config;
       });
     },
-    getRoutes: function(userInfo) {
-      if(!userInfo.menus){
-        return console.warn(userInfo);
-      }
+    getRoutes: function(resources) {
+      // if(!userInfo.menus){
+      //   return console.warn(userInfo);
+      // }
       let vm = this;
       let allowedRouter = [];
       //将菜单数据转成多维数组格式
-      let arrayMenus = util.buildMenu(userInfo.menus);
+      let arrayMenus = util.buildMenu(resources);
       //将多维数组转成对象格式
       let hashMenus = {};
       let setMenu2Hash = function(array, base) {
         array.map(key => {
-          if (key.route) {
-            let hashKey = ((base ? base + '/' : '') + key.route).replace(/^\//, '');
+          if (key.resourcePath) {
+            let hashKey = ((base ? base + '/' : '') + key.resourcePath).replace(/^\//, '');
             hashMenus['/' + hashKey] = true;
-            if (Array.isArray(key.children)) {
-              setMenu2Hash(key.children, key.route);
-            }
+            // if (Array.isArray(key.children)) {
+            //   setMenu2Hash(key.children, key.resourcePath);
+            // }
           }
         });
       };
@@ -143,24 +143,24 @@ export default {
       let vm = this;
       //通过检查token，判断登录状态。如果token不存在，就跳转到登录界面。
       let localUser = util.session('token');
-      if (!localUser || !localUser.token) {
+      if (!localUser) {
         return vm.$router.push({ path: '/login', query: { from: vm.$router.currentRoute.path } });
       }
       //设置请求头统一携带token
-      instance.defaults.headers.common['Authorization'] = 'Bearer ' + localUser.token;
+      //instance.defaults.headers.common['Authorization'] = 'Bearer ' + localUser;
       //获取用户信息及权限数据
-      instance.get(`/signin`, {
+      instance.get(`/login/checkTicket`, {
         params: {
-          Authorization: localUser.token
+          ticket: localUser
         }
       }).then((res) => {
         let userInfo = res.data;
         //取得资源权限对象
-        let resourcePermission = vm.getPermission(userInfo);
+        let resourcePermission = vm.getPermission(userInfo.commission_resource_list);
         //使用资源权限设置请求拦截
-        vm.setInterceptor(resourcePermission);
+        //vm.setInterceptor(resourcePermission);
         //获得实际路由
-        let allowedRouter = vm.getRoutes(userInfo);
+        let allowedRouter = vm.getRoutes(userInfo.commission_resource_list);
         //若无可用路由限制访问
         if (!allowedRouter || !allowedRouter.length) {
           util.session('token','');
@@ -172,25 +172,25 @@ export default {
         vm.menuData = allowedRouter;
         vm.userData = userInfo;
         //权限检验方法
-        Vue.prototype.$_has = function(rArray) {
-          let resources = [];
-          let permission = true;
-          //提取权限数组
-          if (Array.isArray(rArray)) {
-            rArray.forEach(function(e) {
-              resources = resources.concat(e.p);
-            });
-          } else {
-            resources = resources.concat(rArray.p);
-          }
-          //校验权限
-          resources.forEach(function(p) {
-            if (!resourcePermission[p]) {
-              return permission = false;
-            }
-          });
-          return permission;
-        }
+        // Vue.prototype.$_has = function(rArray) {
+        //   let resources = [];
+        //   let permission = true;
+        //   //提取权限数组
+        //   if (Array.isArray(rArray)) {
+        //     rArray.forEach(function(e) {
+        //       resources = resources.concat(e.p);
+        //     });
+        //   } else {
+        //     resources = resources.concat(rArray.p);
+        //   }
+        //   //校验权限
+        //   resources.forEach(function(p) {
+        //     if (!resourcePermission[p]) {
+        //       return permission = false;
+        //     }
+        //   });
+        //   return permission;
+        // }
         //执行回调
         typeof callback === 'function' && callback();
       })

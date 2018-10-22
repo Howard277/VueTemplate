@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as util from '../assets/util.js';
 
 const instance = axios.create({
-  baseURL: 'http://rap2api.taobao.org/app/mock/224',
+  baseURL: 'http://localhost:8081/',
   timeout: 10000
 });
 
