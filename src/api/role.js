@@ -2,9 +2,9 @@ import instance from './index';
 const preUrlPath = '';
 //获取角色列表
 const request = {
-  p: ['get,/roles'],
+  p: ['get,/api/role'],
   r: params => {
-    return instance.get(`${preUrlPath}/roles`, {params})
+    return instance.get(`${preUrlPath}/api/role`, {params})
   }
 };
 //删除角色
