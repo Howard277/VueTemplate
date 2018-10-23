@@ -6,7 +6,7 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const portfinder = require('portfinder')
+const portfinder = require('portfinder')//端口配置
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -29,7 +29,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       errors: true,
     } : false,
     publicPath: config.dev.assetsPublicPath,
-    proxy: config.dev.proxyTable,
+    proxy: [
+      {
+        changeOrigin: true,
+        context: ["/api/**"],
+        target: "http://localhost:8081/"
+      }
+    ],
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
@@ -51,8 +57,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   ]
 })
 
+//配置端口
 module.exports = new Promise((resolve, reject) => {
-  portfinder.basePort = process.env.PORT || config.dev.port
+  portfinder.basePort = process.env.PORT || config.dev.port //基准端口
   portfinder.getPort((err, port) => {
     if (err) {
       reject(err)

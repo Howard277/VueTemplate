@@ -1,10 +1,11 @@
 import instance from './index';
+import axios from "axios";
 const preUrlPath = '';
 //获取角色列表
 const request = {
   p: ['get,/api/role'],
   r: params => {
-    return instance.get(`${preUrlPath}/api/role`, {params})
+    return axios.get('/api/role', {params})
   }
 };
 //删除角色
