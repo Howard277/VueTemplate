@@ -96,7 +96,7 @@ export default {
         .then(res => {
           vm.isBtnLoading = false;
           if (res.data) {
-            util.session("token", res.data);
+            util.session("ticket", res.data);
             //跳转到原来的目标地址
             vm.$emit("login", vm.$router.currentRoute.query.from);
           } else {

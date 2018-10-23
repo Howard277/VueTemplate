@@ -142,8 +142,8 @@ export default {
     signin: function(callback) {
       let vm = this;
       //通过检查token，判断登录状态。如果token不存在，就跳转到登录界面。
-      let localUser = util.session('token');
-      if (!localUser) {
+      let ticket = util.session('ticket');
+      if (!ticket) {
         return vm.$router.push({ path: '/login', query: { from: vm.$router.currentRoute.path } });
       }
       //设置请求头统一携带token
@@ -151,7 +151,7 @@ export default {
       //获取用户信息及权限数据
       instance.get(`/login/checkTicket`, {
         params: {
-          ticket: localUser
+          ticket: ticket
         }
       }).then((res) => {
         let userInfo = res.data;
@@ -163,7 +163,7 @@ export default {
         let allowedRouter = vm.getRoutes(userInfo.commission_resource_list);
         //若无可用路由限制访问
         if (!allowedRouter || !allowedRouter.length) {
-          util.session('token','');
+          util.session('ticket','');
           return document.body.innerHTML = ('<h1>账号访问受限，请联系系统管理员！</h1>');
         }
         //动态注入路由
@@ -206,7 +206,7 @@ export default {
     //退出
     logoutDirect: function(){
       //清除session
-      util.session('token','');
+      util.session('ticket','');
       //清除请求权限控制
       instance.interceptors.request.eject(myInterceptor);
       //清除菜单权限
