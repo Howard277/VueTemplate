@@ -170,7 +170,7 @@ export default {
         vm.extendRoutes(allowedRouter);
         //保存数据用作他处，非必需
         vm.menuData = allowedRouter;
-        vm.userData = userInfo;
+        vm.userData = userInfo.user;
         //权限检验方法
         // Vue.prototype.$_has = function(rArray) {
         //   let resources = [];
@@ -192,7 +192,8 @@ export default {
         //   return permission;
         // }
         //执行回调
-        typeof callback === 'function' && callback();
+        // typeof callback === 'function' && callback();
+        this.$router.push("/")//登录成功，跳到首页
       })
     },
     //登录

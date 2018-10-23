@@ -24,7 +24,7 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
   let routeName = to.meta.name || to.name;
-  window.document.title = (routeName ? routeName + ' - ' : '') + 'Vue-Access-Control';
+  window.document.title = (routeName ? routeName + ' - ' : '') + '授权系统';
   next();
 });
 

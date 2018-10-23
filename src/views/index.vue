@@ -84,10 +84,10 @@
 <template>
   <div class="g-body">
     <el-row type="flex" class="g-head">
-      <a href="http://refined-x.com" target="_blank" title="Vue权限控制" class="logo" >Vue-Access-Control</a>
+      <a href="http://refined-x.com" target="_blank" title="Vue权限控制" class="logo" >授权系统</a>
       <div class="nav">
-        <div class="usermenu" v-if="user.id">
-          欢迎您：{{user.name}}
+        <div class="usermenu" v-if="user.loginName">
+          欢迎您：{{user.userName}}
           <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link>
           <a href="javascript:;" @click="logout"><i class="el-icon-circle-close"></i>退出</a>
         </div>
@@ -120,7 +120,7 @@
       <dashboard />
     </template>
     <template v-else>
-    <router-view id="main"></router-view>
+      <router-view id="main"></router-view>
     </template>
     
   </div>
