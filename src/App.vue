@@ -8,8 +8,8 @@
 
 <script>
 import Vue from "vue";
-import instance from "./api";
-import userPath from "./router/fullpath";
+import api from "./api";
+import fullpath from "./router/fullpath";
 import * as util from "./assets/util.js";
 
 //请求拦截句柄
@@ -37,7 +37,7 @@ export default {
     //设置拦截器
     setInterceptor: function(resourcePermission) {
       let vm = this;
-      myInterceptor = instance.interceptors.request.use(function(config) {
+      myInterceptor = api.interceptors.request.use(function(config) {
         //得到请求路径
         let perName = config.url
           .replace(config.baseURL, "")
@@ -115,7 +115,7 @@ export default {
           allowedRouter = allowedRouter.concat(replyResult);
         }
       };
-      let originPath = util.deepcopy(userPath[0].children);
+      let originPath = util.deepcopy(fullpath[0].children);
       findLocalRoute(originPath);
       return allowedRouter;
     },
@@ -137,7 +137,7 @@ export default {
           }
         });
       });
-      let originPath = util.deepcopy(userPath);
+      let originPath = util.deepcopy(fullpath);
       originPath[0].children = actualRouter;
       //注入404路由，所有其他请求默认路由到404
       vm.$router.addRoutes(
@@ -169,10 +169,9 @@ export default {
         }
       }
       //设置请求头统一携带token
-      //instance.defaults.headers.common['Authorization'] = 'Bearer ' + localUser;
+      //api.defaults.headers.common['Authorization'] = 'Bearer ' + localUser;
       //获取用户信息及权限数据
-      instance
-        .get(`/login/checkTicket`, {
+      api.get(`/login/checkTicket`, {
           params: {
             ticket: ticket
           }
@@ -235,11 +234,11 @@ export default {
       //清除session
       util.session("ticket", "");
       //清除请求权限控制
-      instance.interceptors.request.eject(myInterceptor);
+      api.interceptors.request.eject(myInterceptor);
       //清除菜单权限
       this.$root.hashMenus = {};
       //清除请求头token
-      instance.defaults.headers.common["Authorization"] = "";
+      api.defaults.headers.common["Authorization"] = "";
       //回到登录页
       window.location.href =
         "http://localhost:8081/login/logout?targetAppCode=testApp&targetUrl=http://localhost:1024/";
