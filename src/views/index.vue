@@ -81,6 +81,7 @@
   overflow-y: auto;
 }
 </style>
+
 <template>
   <div class="g-body">
     <el-row type="flex" class="g-head">
