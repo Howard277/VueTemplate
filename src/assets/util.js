@@ -9,14 +9,14 @@ export const session = function (key, value) {
   if (value === void(0)) {
     //如果value是空，表示从session中取值
     var lsVal = sessionStorage.getItem(key);
-    if (lsVal && lsVal.indexOf('autostringify-') === 0) {
+    if (lsVal && lsVal.startsWith('autostringify-')) {
       return JSON.parse(lsVal.split('autostringify-')[1]);
     } else {
       return lsVal;
     }
   } else {
     //如果value不是空，表示向session中存值
-    if (typeof (value) === "object" || Array.isArray(value)) {
+    if (typeof (value) === "object") {
       value = 'autostringify-' + JSON.stringify(value);
     };
     return sessionStorage.setItem(key, value);

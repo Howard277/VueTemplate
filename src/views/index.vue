@@ -84,10 +84,10 @@
 <template>
   <div class="g-body">
     <el-row type="flex" class="g-head">
-      <a href="http://refined-x.com" target="_blank" title="Vue权限控制" class="logo" >授权系统</a>
+      <a href="javascript:;" class="logo" >统一授权管理系统</a>
       <div class="nav">
         <div class="usermenu" v-if="user.loginName">
-          欢迎您：{{user.userName}}
+          你好，{{user.userName}}
           <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link>
           <a href="javascript:;" @click="logout"><i class="el-icon-circle-close"></i>退出</a>
         </div>
@@ -160,12 +160,13 @@ export default {
         .catch(() => {});
     }
   },
+  //从父级节点获取数据
   created: function() {
     let user = this.$parent.userData;
     if (user) {
       this.user = user;
     } else {
-      this.$router.push({ path: "/login" });
+      this.$router.push({ path: "/" });
     }
     let menus = this.$parent.menuData;
     if (menus) {

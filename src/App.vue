@@ -11,6 +11,7 @@ import Vue from "vue";
 import api from "./api";
 import fullpath from "./router/fullpath";
 import * as util from "./assets/util.js";
+const config = require('../config')
 
 //请求拦截句柄
 let myInterceptor;
@@ -71,9 +72,6 @@ export default {
       });
     },
     getRoutes: function(resources) {
-      // if(!userInfo.menus){
-      //   return console.warn(userInfo);
-      // }
       let vm = this;
       let allowedRouter = [];
       //将菜单数据转成多维数组格式
@@ -157,15 +155,15 @@ export default {
       if (!ticket) {
         //如果session中的ticket不存在，表明还未登录。
         //未登录的情况下，判断url中是否有ticket参数
-        let newTicket = this.$route.query.ticket;
-        if (!newTicket) {
+        let queryTicket = this.$route.query.ticket;
+        if (!queryTicket) {
           //如果都没有，则需要重定向到 统一授权系统的登录界面
-          window.location.href =
+          window.location.href = 
             "http://localhost:8081/?targetAppCode=testApp&targetUrl=http://localhost:1024/";
           return;
         }else{
           //如果有新ticket，就赋值。
-          ticket = newTicket;
+          ticket = queryTicket;
         }
       }
       //设置请求头统一携带token
@@ -234,13 +232,13 @@ export default {
       //清除session
       util.session("ticket", "");
       //清除请求权限控制
-      api.interceptors.request.eject(myInterceptor);
+      // api.interceptors.request.eject(myInterceptor);
       //清除菜单权限
       this.$root.hashMenus = {};
       //清除请求头token
       api.defaults.headers.common["Authorization"] = "";
       //回到登录页
-      window.location.href =
+      window.location.href = 
         "http://localhost:8081/login/logout?targetAppCode=testApp&targetUrl=http://localhost:1024/";
     }
   },
