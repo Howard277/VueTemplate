@@ -11,6 +11,13 @@ export default [{
       name: '角色管理'
     },
     component: (resolve) => require(['../views/roles.vue'], resolve)
+  },{
+    path: '/user',
+    name: '平台-用户管理',
+    meta: {
+      name: '用户管理'
+    },
+    component: (resolve) => require(['../views/user.vue'], resolve)
   }, {
     path: '/accounts',
     name: '平台-账号管理',
