@@ -7,11 +7,23 @@
       <!-- <el-button size="small" v-if="canReset">重置</el-button> -->
       <!-- <el-button size="small" type="info" @click="requestNotAllowed">尝试发起越权请求</el-button> -->
     </div>
-    <el-form  v-if="showSearchRegion" ref="form" :model="queryData" label-width="80px">
-        <el-form-item label="登录名">
-            <el-input v-model="queryData.loginName"></el-input>
-        </el-form-item>
-    </el-form>
+    <div v-if="showSearchRegion">
+      <span>登录名：</span>
+      <el-input size="mini" v-model="queryData.loginName" style="width:200px;"></el-input>
+      <br/>
+      <span>用户名：</span>
+      <el-input size="mini" v-model="queryData.userName" style="width:200px;"></el-input>
+      <br/>
+      <span>机构编码：</span>  
+      <el-input size="mini" v-model="queryData.orgCode" style="width:200px;"></el-input>
+      <br/>
+      <span>机构名称：</span>  
+      <el-input size="mini" v-model="queryData.orgName" style="width:200px;"></el-input>  
+      <br/>
+      <el-button size="small" @click="fetchData" type="primary">查询</el-button>
+      <el-button size="small" @click="resetQueryCondition" type="primary">重置</el-button>
+    </div>
+    <br/>
     <!-- table start  -->
     <el-table :data="dataList" border highlight-current-row stripe style="width: 100%">
       <el-table-column type="index" lable="No." width="50">
@@ -59,7 +71,10 @@ export default {
       },
       loading: false,
       queryData: {
-          loginName: ''
+        loginName: "",
+        userName: "",
+        orgCode: "",
+        orgName: ""
       },
       showSearchRegion: false //搜索区域显示控制
     };
@@ -71,9 +86,9 @@ export default {
         pageIndex: this.pagination.currentPage,
         pageSize: this.pagination.pageSize,
         loginName: this.queryData.loginName,
-        userName: "",
-        orgCode: "",
-        orgName: ""
+        userName: this.queryData.userName,
+        orgCode: this.queryData.orgCode,
+        orgName: this.queryData.orgName
       };
       apiUser.userPageOfJSON(queryParams).then(res => {
         this.dataList = res.data.content;
@@ -106,6 +121,13 @@ export default {
       } else {
         return "无效";
       }
+    },
+    //重置查询条件
+    resetQueryCondition: function() {
+      this.queryData.loginName = "";
+      this.queryData.userName = "";
+      this.queryData.orgCode = "";
+      this.queryData.orgName = "";
     }
   },
   created() {
