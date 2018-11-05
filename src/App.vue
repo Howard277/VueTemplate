@@ -11,7 +11,7 @@ import Vue from "vue";
 import api from "./api";
 import fullpath from "./router/fullpath";
 import * as util from "./assets/util.js";
-import config from '../config'
+import config from "../config";
 
 //请求拦截句柄
 let myInterceptor;
@@ -158,9 +158,15 @@ export default {
         let queryTicket = this.$route.query.ticket;
         if (!queryTicket) {
           //如果都没有，则需要重定向到 统一授权系统的登录界面
-          window.location.href = config.dev.uamRootUrl + '?targetAppCode=' + config.dev.targetAppCode + '&targetUrl=http://localhost:' + config.dev.port;
+          window.location.href =
+            process.env.uamRootUrl +
+            "?targetAppCode=" +
+            process.env.targetAppCode +
+            "&targetUrl=http://localhost:" +
+            process.env.port +
+            "/";
           return;
-        }else{
+        } else {
           //如果有新ticket，就赋值。
           ticket = queryTicket;
         }
@@ -168,7 +174,8 @@ export default {
       //设置请求头统一携带token
       //api.defaults.headers.common['Authorization'] = 'Bearer ' + localUser;
       //获取用户信息及权限数据
-      api.get(`/login/checkTicket`, {
+      api
+        .get(`/login/checkTicket`, {
           params: {
             ticket: ticket
           }
@@ -214,7 +221,7 @@ export default {
           //   });
           //   return permission;
           // }
-          
+
           //执行回调
           this.$router.push("/"); //登录成功，跳到首页
         });
@@ -237,7 +244,13 @@ export default {
       //清除请求头token
       api.defaults.headers.common["Authorization"] = "";
       //回到登录页
-      window.location.href = config.dev.uamRootUrl + 'login/logout?targetAppCode=' + config.dev.targetAppCode + '&targetUrl=http://localhost:' + config.dev.port;
+      window.location.href =
+        process.env.uamRootUrl +
+        "login/logout?targetAppCode=" +
+        process.env.targetAppCode +
+        "&targetUrl=http://localhost:" +
+        process.env.port +
+        "/";
     }
   },
   created: function(newPath) {

@@ -13,11 +13,7 @@ module.exports = {
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8088, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-
-    // 统一登录配置
-    uamRootUrl: 'http://localhost:8081/',
-    targetAppCode: 'testApp',
+    port: 8000, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
 
     autoOpenBrowser: false,
     errorOverlay: true,
